@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../styles//qm.css">
+</head>
+
+<body>
+    <header>
+        <h1>SVG点阵图可视化</h1>
+    </header>
+    <section class="grid-container">
+        <div class="grid-left" data-content="原图">
+            <header>
+                <input id="file" type="file" onchange="handleFiles(this.files)">
+                <div>
+                    <button onclick="flushed()">刷新</button>
+                    <button id="btn" onclick="clearData()">清空数据</button>
+                    <button onclick="lb()">图片连播</button>
+                </div>
+            </header>
+            <footer class="img-container">
+                <img src="" alt="" id="picture">
+            </footer>
+        </div>
+        <div></div>
+        <div class="grid-right" data-content="点阵图">
+            <div></div>
+            <div class="container"></div>
+        </div>
+    </section>
+    <script src="../js/qm.js"></script>
+</body>
+
+</html>
