@@ -1,4 +1,4 @@
-const BASE = "http://127.0.0.1:3007";
+const BASE = "http://127.0.0.1:3007/qm";
 let str = [];
 //处理svg
 let lines = []; //用于储存svg内的所有line标签
@@ -35,7 +35,7 @@ function handle_svg(file, flag) {
   //上传至后端
   let formData = new FormData();
   formData.append("file", file);
-  fetch(BASE + "/qm/upload", {
+  fetch(BASE + "/upload", {
     method: "POST",
     body: formData,
   })
@@ -71,11 +71,12 @@ function handle_svg(file, flag) {
           let str_data = string
             .slice(index * length, index * length + length)
             .split("");
+
           let dasharray = "0";
           str_data.forEach((nums) => {
             // 如果当前点为1,即存在颜色点,该点为背景色,则设置dasharray长度为1的实线
             if (parseInt(nums)) dasharray += " 0 1";
-            // 如果当前点为0,即不存在颜色点,该点为前景色,则设置dasharray长度为1的空白间隙
+            // 如果当前点为0,即不存在颜色点,该点为前景色,则设置dasharray长度为1的实线
             else dasharray += " 1 0";
           });
           line.style.transitionDelay = `${Math.random()}s`;
@@ -97,7 +98,7 @@ function flushed() {
 
 //清空数据库
 function clearData() {
-  fetch(BASE + "/qm/clearData", { method: "POST" })
+  fetch(BASE + "/clearData", { method: "POST" })
     .then((res) => res.json())
     .then((data) => {
       if (data.code === 200) alert("清空成功");
@@ -106,13 +107,12 @@ function clearData() {
 
 //连播
 function lb() {
-  fetch(BASE + "/qm/svgBinary", {
+  fetch(BASE + "/svgBinary", {
     method: "GET",
   })
     .then((res) => res.json())
     .then((data) => {
       data.forEach((item) => lbStr.push(item));
-      console.log(lbStr);
       function initLb() {
         let svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
         svg.setAttribute("viewBox", `0 0 ${lbStr_length} ${lbStr_length}`);
@@ -133,7 +133,7 @@ function lb() {
 
         let svgContainer = document.querySelector(".container");
         svgContainer.appendChild(svg);
-        console.log(lbStr[current_lbStr]);
+
         draw(lbStr[current_lbStr]);
         // 每2秒钟改变一次line元素的stroke-dasharray,更新视图上的点阵内容,并循环执行
         setInterval(() => {
@@ -143,18 +143,16 @@ function lb() {
       }
 
       function draw(string) {
-        console.log(string);
         lbStr_lines.forEach((line, index) => {
           let lbStr_data = string
             .slice(index * lbStr_length, index * lbStr_length + lbStr_length)
             .split("");
 
-          console.log(lbStr_data);
           let dasharray = "0";
           lbStr_data.forEach((nums) => {
-            // 如果当前点为1,即存在颜色点,该点为背景色,则设置dasharray长度为1的实线
+            // 如果当前点为1,即存在颜色点,该点为背景色,则设置dasharray长度为1的空白间隙
             if (parseInt(nums)) dasharray += " 0 1";
-            // 如果当前点为0,即不存在颜色点,该点为前景色,则设置dasharray长度为1的空白间隙
+            // 如果当前点为0,即不存在颜色点,该点为前景色,则设置dasharray长度为1的实线
             else dasharray += " 1 0";
           });
           line.style.transitionDelay = `${Math.random()}s`;
